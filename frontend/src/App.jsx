@@ -9,7 +9,6 @@ function App() {
   const getAllUsers = () => {
     try {
       axios.get(`${url}routes/get-all-users/`).then((response) => {
-        console.log(response.data);
         setUsers(response.data);
       });
     } catch (error) {
@@ -23,7 +22,6 @@ function App() {
 
   useEffect(() => {
     setUser(users[0]);
-    console.log(user.name);
   }, [users]);
 
   return (

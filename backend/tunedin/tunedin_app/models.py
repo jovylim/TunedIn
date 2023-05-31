@@ -42,12 +42,13 @@ class Posts(models.Model):
 
 
 class PostReactions(models.Model):
+    id = models.BigAutoField(primary_key=True)
     TYPE_CHOICES = [
         ('LIKE', 'Like'),
         ('COMMENT', 'Comment'),
     ]
     user = models.ForeignKey(Users, related_name='post_reaction_user_uuid', on_delete=models.DO_NOTHING)
-    post = models.ForeignKey(Posts, related_name='post_reaction_post_uuid', on_delete=models.DO_NOTHING, primary_key=True)
+    post = models.ForeignKey(Posts, related_name='post_reaction_post_uuid', on_delete=models.DO_NOTHING)
     type = models.CharField(max_length=7, choices=TYPE_CHOICES)
     comment = models.CharField(max_length=500, blank=True, default='')
 
@@ -73,11 +74,12 @@ class Contacts(models.Model):
 
 
 class Connections(models.Model):
+    id = models.BigAutoField(primary_key=True)
     TYPE_CHOICES = [
         ('FOLLOWING', 'Following'),
         ('FOLLOWER', 'Follower'),
     ]
-    user = models.ForeignKey(Users, related_name='connection_user_uuid', on_delete=models.DO_NOTHING, primary_key=True)
+    user = models.ForeignKey(Users, related_name='connection_user_uuid', on_delete=models.DO_NOTHING)
     target_user = models.ForeignKey(Users, related_name='connection_target_user_uuid', on_delete=models.DO_NOTHING)
     type = models.CharField(max_length=9, choices=TYPE_CHOICES)
 
