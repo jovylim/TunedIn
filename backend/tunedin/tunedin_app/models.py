@@ -10,7 +10,7 @@ class Users(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    isBusiness = models.BooleanField(default=False)
+    is_business = models.BooleanField(default=False)
     name = models.CharField(max_length=50)
     profile_picture = models.CharField(max_length=500, blank=True, default='')
     about_me = models.CharField(max_length=100, blank=True, default='')
