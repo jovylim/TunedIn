@@ -1,19 +1,36 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-# Create your models here.
+
+class AccountManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        if not email:
+            raise ValueError('User must have a valid email.')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
 
-class Users(models.Model):
+class Users(AbstractBaseUser):
     uuid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
     )
+    email = models.EmailField(verbose_name='email', max_length=100, unique=True, editable=False)
     is_business = models.BooleanField(default=False)
     name = models.CharField(max_length=50)
     profile_picture = models.CharField(max_length=500, blank=True, default='')
     about_me = models.CharField(max_length=100, blank=True, default='')
+
+    objects = AccountManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
     def __str__(self):
         return self.name
