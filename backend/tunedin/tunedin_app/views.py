@@ -24,7 +24,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-
 class AllUsers(APIView):
     def get(self, request):
         users = Users.objects.all()
@@ -41,12 +40,9 @@ class OneUser(APIView):
 
 class AddUser(APIView):
     def put(self, request):
-        serializer = UsersSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+        new_user = Users.objects.create_user(name=request.data['name'], email=request.data['email'], password=request.data['password'])
+        new_user.save()
+        return HttpResponse('created')
 
 
 class UpdateUser(APIView):
@@ -244,11 +240,11 @@ class AddMessage(APIView):
 class SeedUsers(APIView):
     def get(self, request):
         Users.objects.all().delete()
-        user_one = Users(name='John', email='john@gmail.com', password='johnpassword')
+        user_one = Users.objects.create_user(name='John', email='john@gmail.com', password='johnpassword')
         user_one.save()
-        user_two = Users(name='Cindy', email='cindy@gmail.com', password='cindypassword')
+        user_two = Users.objects.create_user(name='Cindy', email='cindy@gmail.com', password='cindypassword')
         user_two.save()
-        business_one = Users(name='the dance company', is_business=True, email='thedancecompany@gmail.com', password='thedancecompanypassword')
+        business_one = Users.objects.create_user(name='the dance company', is_business=True, email='thedancecompany@gmail.com', password='thedancecompanypassword')
         business_one.save()
         return HttpResponse('created')
 
