@@ -1,8 +1,28 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from .models import *
 from rest_framework.response import Response
 from .serializer import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['company'] = 'TunedIn',
+
+        return token
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
 
 
 class AllUsers(APIView):
@@ -14,7 +34,7 @@ class AllUsers(APIView):
 
 class OneUser(APIView):
     def post(self, request, pk):
-        user = Users.object.get(uuid=pk)
+        user = Users.objects.get(uuid=pk)
         serializer = UsersSerializer(user, many=False)
         return Response(serializer.data)
 
@@ -47,7 +67,7 @@ class AllPosts(APIView):
 
 class AllJobPosts(APIView):
     def get(self, request):
-        posts = Posts.objects.filter(type='Job')
+        posts = Posts.objects.filter(type='JOB')
         serializer = PostsSerializer(posts, many=True)
         return Response(serializer.data)
 
@@ -61,7 +81,7 @@ class OneUserPosts(APIView):
 
 class OnePost(APIView):
     def post(self, request, pk):
-        user = Posts.object.get(uuid=pk)
+        user = Posts.objects.get(uuid=pk)
         serializer = PostsSerializer(user, many=False)
         return Response(serializer.data)
 
@@ -159,7 +179,7 @@ class AddConnection(APIView):
 
 class DeleteConnection(APIView):
     def delete(self, request, pk):
-        connection = Experiences.objects.get(id=pk)
+        connection = Connections.objects.get(id=pk)
         connection.delete()
         return Response('connection deleted')
 
@@ -184,7 +204,7 @@ class AddExperience(APIView):
 class UpdateExperience(APIView):
     def patch(self, request, pk):
         experience = Experiences.objects.get(id=pk)
-        serializer = ContactsSerializer(instance=experience, data=request.data, partial=True)
+        serializer = ExperiencesSerializer(instance=experience, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
@@ -219,3 +239,32 @@ class AddMessage(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class SeedUsers(APIView):
+    def get(self, request):
+        Users.objects.all().delete()
+        user_one = Users(name='John', email='john@gmail.com', password='johnpassword')
+        user_one.save()
+        user_two = Users(name='Cindy', email='cindy@gmail.com', password='cindypassword')
+        user_two.save()
+        business_one = Users(name='the dance company', is_business=True, email='thedancecompany@gmail.com', password='thedancecompanypassword')
+        business_one.save()
+        return HttpResponse('created')
+
+
+class SeedPosts(APIView):
+    def get(self, request):
+        Posts.objects.all().delete()
+        post_one = Posts(user=Users.objects.get(uuid='1d6b63b6-6099-419b-884f-297c2c4f0c2c'), type='TEXT',
+                         content='hello everyone! i will be performing tonight!')
+        post_one.save()
+        post_two = Posts(user=Users.objects.get(uuid='1d6b63b6-6099-419b-884f-297c2c4f0c2c'), type='TEXT',
+                         content='performance was a failure!!!!! :(')
+        post_two.save()
+        post_three = Posts(user=Users.objects.get(uuid='1c6bf75d-1f32-415d-aaec-4fb4fd7f51c9'), type='JOB',
+                         content='need a new pole dancer. our previous one rage quit halfway during the show! serious candidates only! you will only be paid in exposure!')
+        post_three.save()
+        return HttpResponse('created')
+
+

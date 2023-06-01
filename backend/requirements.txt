@@ -1,0 +1,11 @@
+-i https://pypi.org/simple
+asgiref==3.7.2
+django==4.2.1
+django-cors-headers==4.0.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
+psycopg2-binary==2.9.6
+pyjwt==2.7.0
+pytz==2023.3
+sqlparse==0.4.4
+timedelta==2020.12.3

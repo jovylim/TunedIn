@@ -50,6 +50,7 @@ class Posts(models.Model):
     )
     user = models.ForeignKey(Users, related_name='post_user_uuid', on_delete=models.DO_NOTHING, null=True)
     type = models.CharField(max_length=5, choices=TYPE_CHOICES)
+    timestamp = models.DateTimeField(verbose_name='timestamp', auto_now_add=True)
     content = models.CharField(max_length=500)
     like_count = models.IntegerField(default=0)
     comment_count = models.IntegerField(default=0)
@@ -115,7 +116,7 @@ class Experiences(models.Model):
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
     content = models.CharField(max_length=500)
     start_date = models.DateTimeField(verbose_name='Start Date / Date Achieved')
-    end_date = models.DateTimeField(verbose_name='End Date', blank=True, default='')
+    end_date = models.DateTimeField(verbose_name='End Date', blank=True, null=True, default=None)
 
     def __str__(self):
         return self.id

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "deddf34c7f8e2dc5ac2e4e5c08e7fa477e1b14e85abfdb3d1b7c40a408b2abf0"
+            "sha256": "6a1899a02ea72246fc668dd0b0cd170b8c28d5adca3c985cd00908640a62eae8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -22,7 +22,7 @@
                 "sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e",
                 "sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed"
             ],
-            "markers": "python_version >= '3.7'",
+            "index": "pypi",
             "version": "==3.7.2"
         },
         "django": {
@@ -48,6 +48,14 @@
             ],
             "index": "pypi",
             "version": "==3.14.0"
+        },
+        "djangorestframework-simplejwt": {
+            "hashes": [
+                "sha256:4c0d2e2513e12587d93501ac091781684a216c3ee614eb3b5a10586aef5ca845",
+                "sha256:d27d4bcac2c6394f678dea8b4d0d511c6e18a7f2eb8aaeeb8a7de601aeb77c42"
+            ],
+            "index": "pypi",
+            "version": "==5.2.2"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -117,11 +125,20 @@
             "index": "pypi",
             "version": "==2.9.6"
         },
+        "pyjwt": {
+            "hashes": [
+                "sha256:ba2b425b15ad5ef12f200dc67dd56af4e26de2331f965c5439994dad075876e1",
+                "sha256:bd6ca4a3c4285c1a2d4349e5a035fdf8fb94e04ccd0fcbe6ba289dae9cc3e074"
+            ],
+            "index": "pypi",
+            "version": "==2.7.0"
+        },
         "pytz": {
             "hashes": [
                 "sha256:1d8ce29db189191fb55338ee6d0387d82ab59f3d00eac103412d64e0ebd0c588",
                 "sha256:a151b3abb88eda1d4e34a9814df37de2a80e301e68ba0fd856fb9b46bfbbbffb"
             ],
+            "index": "pypi",
             "version": "==2023.3"
         },
         "sqlparse": {
@@ -129,8 +146,15 @@
                 "sha256:5430a4fe2ac7d0f93e66f1efc6e1338a41884b7ddf2a350cedd20ccc4d9d28f3",
                 "sha256:d446183e84b8349fa3061f0fe7f06ca94ba65b426946ffebe6e3e8295332420c"
             ],
-            "markers": "python_version >= '3.5'",
+            "index": "pypi",
             "version": "==0.4.4"
+        },
+        "timedelta": {
+            "hashes": [
+                "sha256:41c28b314de9cb6e4c95fcc9f4e3ecee435f2fc821a079cd9243be4783ac4cf4"
+            ],
+            "index": "pypi",
+            "version": "==2020.12.3"
         }
     },
     "develop": {}

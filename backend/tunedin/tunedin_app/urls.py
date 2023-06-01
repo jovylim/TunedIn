@@ -1,13 +1,16 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import TokenRefreshView
 
 
 urlpatterns = [
+    path('seed-users/', views.SeedUsers.as_view(), name='seed-users'),
     path('get-all-users/', views.AllUsers.as_view(), name='all-users'),
     path('get-one-user/<str:pk>', views.OneUser.as_view(), name='one-user'),
     path('add-user/', views.AddUser.as_view(), name='add-user'),
     path('update-user/<str:pk>', views.UpdateUser.as_view(), name='update-user'),
+    path('seed-posts/', views.SeedPosts.as_view(), name='seed-posts'),
     path('get-all-posts/', views.AllPosts.as_view(), name='all-posts'),
     path('get-all-job-posts/', views.AllJobPosts.as_view(), name='all-job-posts'),
     path('get-one-user-posts/<str:pk>', views.OneUserPosts.as_view(), name='one-user-posts'),
@@ -31,4 +34,6 @@ urlpatterns = [
     path('get-one-user-sent-messages/<str:pk>', views.OneUserSentMessages.as_view(), name='one-user-sent-messages'),
     path('get-one-user-received-messages/<str:pk>', views.OneUserReceivedMessages.as_view(), name='one-user-received-messages'),
     path('add-message/', views.AddMessage.as_view(), name='add-message'),
+    path('token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
