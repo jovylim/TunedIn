@@ -1,33 +1,20 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import UserContext from "../context/user";
+import Navbar from "./Navbar";
+import Jobs from "./Jobs";
+import Messaging from "./Messaging";
+import Profile from "./Profile";
+import Feed from "./Feed";
 
 const Home = () => {
+  const userCtx = useContext(UserContext);
   return (
     <>
-      <div className="navbar bg-primary">
-        <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
-        </div>
-        <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Link</a>
-            </li>
-            <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2 bg-base-100">
-                  <li>
-                    <a>Link 1</a>
-                  </li>
-                  <li>
-                    <a>Link 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <Navbar />
+      {userCtx.currentPage === "home" && <Feed />}
+      {userCtx.currentPage === "jobs" && <Jobs />}
+      {userCtx.currentPage === "messaging" && <Messaging />}
+      {userCtx.currentPage === "profile" && <Profile />}
     </>
   );
 };

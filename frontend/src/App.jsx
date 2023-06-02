@@ -10,6 +10,7 @@ function App() {
   const [url, setUrl] = useState("http://localhost:8000/");
   const [accessToken, setAccessToken] = useState("");
   const [showLogin, setShowLogin] = useState(true);
+  const [currentPage, setCurrentPage] = useState("home");
   // const [users, setUsers] = useState([]);
   // const [user, setUser] = useState([]);
 
@@ -33,7 +34,15 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value={{ accessToken, setAccessToken, url }}>
+      <UserContext.Provider
+        value={{
+          accessToken,
+          setAccessToken,
+          url,
+          currentPage,
+          setCurrentPage,
+        }}
+      >
         {accessToken.length > 0 && <Home />}
         {accessToken.length === 0 && showLogin && (
           <Login setShowLogin={setShowLogin} />
