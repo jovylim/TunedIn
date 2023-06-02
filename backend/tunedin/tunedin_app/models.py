@@ -33,8 +33,8 @@ class Users(AbstractBaseUser):
     email = models.EmailField(verbose_name='email', max_length=100, unique=True, editable=False)
     is_business = models.BooleanField(default=False)
     name = models.CharField(max_length=50)
-    profile_picture = models.CharField(max_length=500, blank=True, default='')
-    about_me = models.CharField(max_length=100, blank=True, default='')
+    profile_picture = models.CharField(max_length=500, blank=True, null=True, default='')
+    about_me = models.CharField(max_length=100, blank=True, null=True, default='')
 
     objects = AccountManager()
     USERNAME_FIELD = 'email'
