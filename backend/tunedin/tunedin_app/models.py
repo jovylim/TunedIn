@@ -4,14 +4,20 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class AccountManager(BaseUserManager):
-    def create_user(self, name, email, is_business=False, password=None):
+    def create_user(self, name, email, is_business=False, password=None, profile_picture=None, about_me=None):
+        if not name:
+            raise ValueError('User must have a name.')
         if not email:
             raise ValueError('User must have a valid email.')
+        if not password:
+            raise ValueError('User must have a valid password.')
 
         user = self.model(
             name=name,
             email=self.normalize_email(email),
             is_business=is_business,
+            profile_picture=profile_picture,
+            about_me=about_me,
         )
         user.set_password(password)
         user.save(using=self._db)

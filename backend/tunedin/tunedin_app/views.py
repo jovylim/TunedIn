@@ -39,10 +39,11 @@ class OneUser(APIView):
 
 
 class AddUser(APIView):
+    authentication_classes = []
     def put(self, request):
         new_user = Users.objects.create_user(name=request.data['name'], email=request.data['email'], password=request.data['password'])
         new_user.save()
-        return HttpResponse('created')
+        return Response('created')
 
 
 class UpdateUser(APIView):
@@ -240,12 +241,18 @@ class AddMessage(APIView):
 class SeedUsers(APIView):
     def get(self, request):
         Users.objects.all().delete()
-        user_one = Users.objects.create_user(name='John', email='john@gmail.com', password='johnpassword')
+        user_one = Users.objects.create_user(name='John Tan', email='john@gmail.com', password='johnpassword', profile_picture='../../pictures/johnprofilepic.jpg', about_me='accountant by day, dancer by night')
         user_one.save()
-        user_two = Users.objects.create_user(name='Cindy', email='cindy@gmail.com', password='cindypassword')
+        user_two = Users.objects.create_user(name='Cindy Loo', email='cindy@gmail.com', password='cindypassword', profile_picture='../../pictures/cindyprofilepic.jpeg', about_me='wannabe singer song writer')
         user_two.save()
-        business_one = Users.objects.create_user(name='the dance company', is_business=True, email='thedancecompany@gmail.com', password='thedancecompanypassword')
+        user_three = Users.objects.create_user(name='Tessy', email='tessy@gmail.com', password='tessypassword', profile_picture='../../pictures/tessyprofilepic.jpeg', about_me='professional guitarist')
+        user_three.save()
+        user_four = Users.objects.create_user(name='Thomas Choo', email='thomas@gmail.com', password='thomaspassword', profile_picture='../../pictures/thomasprofilepic.jpeg', about_me='heavy metal drummer!!!!!!!!! rock on!!!!!!!!')
+        user_four.save()
+        business_one = Users.objects.create_user(name='The Dance Company', is_business=True, email='thedancecompany@gmail.com', password='thedancecompanypassword', profile_picture='../../pictures/thedancecompanyprofilepic.png', about_me='dance your heart away with us today!')
         business_one.save()
+        business_two = Users.objects.create_user(name='Music Works', is_business=True, email='musicworks@gmail.com', password='musicworkspassword', profile_picture='../../pictures/musicworksprofilepic.jpeg', about_me='we love scouting local talent. drop us a DM if you wanna connect and collab!')
+        business_two.save()
         return HttpResponse('created')
 
 

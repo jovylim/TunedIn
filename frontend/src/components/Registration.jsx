@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { fetchData } from "../helpers/common";
 
 const Registration = (props) => {
-  const [name, setName] = useState("tom");
-  const [email, setEmail] = useState("tom@gmail.com");
-  const [password, setPassword] = useState("tompassword");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const registerUser = async () => {
     const { ok, data } = await fetchData(
@@ -22,6 +22,7 @@ const Registration = (props) => {
       setEmail("");
       setPassword("");
       setName("");
+      props.setShowLogin(true);
     } else {
       console.log(data);
     }
@@ -32,7 +33,9 @@ const Registration = (props) => {
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Sign up for TunedIn account</h1>
+            <h1 className="text-5xl font-bold">
+              Sign up for a TunedIn account
+            </h1>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
