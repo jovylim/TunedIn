@@ -319,7 +319,7 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="grid grid-cols-1 h-fit w-9/12">
-          <div className="card bg-success h-fit py-20 rounded-none ">
+          <div className="card bg-success h-fit py-10 rounded-none ">
             <div className="font-bold text-4xl p-2">Experiences</div>
             <div className="carousel">
               {props.userExperiences
