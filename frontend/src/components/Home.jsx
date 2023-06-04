@@ -104,6 +104,7 @@ const Home = () => {
           userContacts={userContacts}
           getUserData={getUserData}
           getUserContacts={getUserContacts}
+          getUserExperiences={getUserExperiences}
         />
       )}
     </>
