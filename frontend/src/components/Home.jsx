@@ -10,10 +10,14 @@ import { fetchData } from "../helpers/common";
 const Home = () => {
   const userCtx = useContext(UserContext);
   const [userData, setUserData] = useState([]);
+  const [userFollowers, setUserFollowers] = useState([]);
+  const [userFollowing, setUserFollowing] = useState([]);
+  const [userExperiences, setUserExperiences] = useState([]);
+  const [userContacts, setUserContacts] = useState([]);
 
   const getUserData = async () => {
     const { ok, data } = await fetchData(
-      "/routes/get-one-user/" + userCtx.userUUID,
+      "/routes/get-one-user/" + userCtx.targetUserUUID,
       userCtx.accessToken,
       "POST"
     );
@@ -25,8 +29,64 @@ const Home = () => {
     }
   };
 
+  const getUserFollowers = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-followers/" + userCtx.targetUserUUID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserFollowers(data);
+    } else {
+      console.log(data);
+    }
+  };
+
+  const getUserFollowing = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-following/" + userCtx.targetUserUUID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserFollowing(data);
+    } else {
+      console.log(data);
+    }
+  };
+
+  const getUserExperiences = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-experiences/" + userCtx.targetUserUUID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserExperiences(data);
+    } else {
+      console.log(data);
+    }
+  };
+
+  const getUserContacts = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-contacts/" + userCtx.targetUserUUID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserContacts(data);
+    } else {
+      console.log(data);
+    }
+  };
+
   useEffect(() => {
     getUserData();
+    getUserFollowers();
+    getUserFollowing();
+    getUserExperiences();
+    getUserContacts();
   }, []);
 
   return (
@@ -35,7 +95,17 @@ const Home = () => {
       {userCtx.currentPage === "home" && <Feed userData={userData} />}
       {userCtx.currentPage === "jobs" && <Jobs userData={userData} />}
       {userCtx.currentPage === "messaging" && <Messaging userData={userData} />}
-      {userCtx.currentPage === "profile" && <Profile userData={userData} />}
+      {userCtx.currentPage === "profile" && (
+        <Profile
+          userData={userData}
+          userFollowers={userFollowers}
+          userFollowing={userFollowing}
+          userExperiences={userExperiences}
+          userContacts={userContacts}
+          getUserData={getUserData}
+          getUserContacts={getUserContacts}
+        />
+      )}
     </>
   );
 };

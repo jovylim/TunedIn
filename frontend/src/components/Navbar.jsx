@@ -15,7 +15,7 @@ const Navbar = () => {
           </a>
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal px-1 text-xl">
+          <ul className="menu menu-horizontal px-1 text-xl font-semibold">
             <li>
               <a onClick={() => userCtx.setCurrentPage("home")}>Home</a>
             </li>

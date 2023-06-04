@@ -8,7 +8,8 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [currentPage, setCurrentPage] = useState("home");
-  const [userUUID, setUserUUID] = useState([]);
+  const [userUUID, setUserUUID] = useState("");
+  const [targetUserUUID, setTargetUserUUID] = useState("");
 
   return (
     <>
@@ -20,6 +21,8 @@ function App() {
           setCurrentPage,
           userUUID,
           setUserUUID,
+          targetUserUUID,
+          setTargetUserUUID,
         }}
       >
         {accessToken.length > 0 && <Home />}
