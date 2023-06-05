@@ -345,6 +345,18 @@ const Profile = (props) => {
     }
   };
 
+  const checkFollower = () => {
+    // setFollowingTarget(false);
+    props.setConnectionID(null);
+    console.log(props.userFollowers);
+    const temp = props.userFollowers.find((e) => e.user === userCtx.userUUID);
+    if (temp) {
+      console.log("hello");
+      // setFollowingTarget(true);
+      props.setConnectionID(temp.id);
+    }
+  };
+
   const followUser = async () => {
     const { ok, data } = await fetchData(
       "/routes/add-connection/",
@@ -359,7 +371,8 @@ const Profile = (props) => {
 
     if (ok) {
       props.getUserFollowers();
-      props.setFollowingTarget(true);
+      // checkFollower();
+      // props.setFollowingTarget(true);
     } else {
       console.log(data);
     }
@@ -374,7 +387,8 @@ const Profile = (props) => {
 
     if (ok) {
       props.getUserFollowers();
-      props.setFollowingTarget(false);
+      props.setConnectionID(null);
+      // props.setFollowingTarget(false);
     } else {
       console.log(data);
     }
@@ -405,19 +419,25 @@ const Profile = (props) => {
   //     .catch((err) => console.log(err));
   // };
 
+  useEffect(() => {
+    checkFollower();
+  }, [props.userFollowers]);
+
   return (
     <>
       <div className="flex h-full w-full ">
         <div className="flex h-200 w-3/12 bg-accent">
           <div className="grid p-10 h-fit flex-auto card rounded-none">
             {userCtx.userUUID !== userCtx.targetUserUUID &&
-              props.followingTarget && (
+              // props.followingTarget
+              props.connectionID && (
                 <button className="btn" onClick={() => unfollowUser()}>
                   Following
                 </button>
               )}
             {userCtx.userUUID !== userCtx.targetUserUUID &&
-              !props.followingTarget && (
+              // !props.followingTarget
+              !props.connectionID && (
                 <button
                   className="btn btn-outline"
                   onClick={() => followUser()}
