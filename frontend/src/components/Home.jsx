@@ -89,6 +89,14 @@ const Home = () => {
     getUserContacts();
   }, []);
 
+  useEffect(() => {
+    getUserData();
+    getUserFollowers();
+    getUserFollowing();
+    getUserExperiences();
+    getUserContacts();
+  }, [userCtx.targetUserUUID]);
+
   return (
     <>
       <Navbar />

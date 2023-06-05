@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../context/user";
 import { fetchData } from "../helpers/common";
+import Home from "./Home";
 
 const Profile = (props) => {
   const userCtx = useContext(UserContext);
@@ -350,7 +351,7 @@ const Profile = (props) => {
             </div>
             <br />
             <div className="grid h-fit card">
-              <div className="stats bg-info">
+              <div className="stats bg-info cursor-pointer">
                 <div
                   className="stat place-items-center"
                   onClick={() => {
@@ -359,7 +360,9 @@ const Profile = (props) => {
                   }}
                 >
                   <div className="stat-title">Followers</div>
-                  <div className="stat-value">{props.userFollowers.length}</div>
+                  <div className="stat-value ">
+                    {props.userFollowers.length}
+                  </div>
                 </div>
                 <div
                   className="stat place-items-center"
@@ -399,12 +402,14 @@ const Profile = (props) => {
           <div className="card bg-success h-fit py-10 rounded-none ">
             <div className="flex flex-row p-2">
               <div className="font-bold text-4xl w-fit">Experiences</div>
-              <button
-                className="btn btn-outline btn-accent mx-4"
-                onClick={() => window.add_experience_modal.showModal()}
-              >
-                Add New Experience
-              </button>
+              {userCtx.userUUID === userCtx.targetUserUUID && (
+                <button
+                  className="btn btn-outline btn-accent mx-4"
+                  onClick={() => window.add_experience_modal.showModal()}
+                >
+                  Add New Experience
+                </button>
+              )}
             </div>
 
             <div className="carousel">
@@ -749,7 +754,16 @@ const Profile = (props) => {
                     </div>
                   </div>
                   <div>
-                    <div className="font-bold">{item.name}</div>
+                    <div
+                      className="font-bold hover:underline hover:cursor-pointer"
+                      onClick={() => {
+                        userCtx.setTargetUserUUID(item.uuid);
+                        userCtx.setCurrentPage("profile");
+                        window.followers_modal.close();
+                      }}
+                    >
+                      {item.name}
+                    </div>
                   </div>
                 </div>
               );
@@ -773,7 +787,16 @@ const Profile = (props) => {
                     </div>
                   </div>
                   <div>
-                    <div className="font-bold">{item.name}</div>
+                    <div
+                      className="font-bold hover:underline hover:cursor-pointer"
+                      onClick={() => {
+                        userCtx.setTargetUserUUID(item.uuid);
+                        userCtx.setCurrentPage("profile");
+                        window.following_modal.close();
+                      }}
+                    >
+                      {item.name}
+                    </div>
                   </div>
                 </div>
               );

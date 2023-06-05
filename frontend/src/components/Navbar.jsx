@@ -28,7 +28,12 @@ const Navbar = () => {
               </a>
             </li>
             <li>
-              <a onClick={() => userCtx.setCurrentPage("profile")}>
+              <a
+                onClick={() => {
+                  userCtx.setTargetUserUUID(userCtx.userUUID);
+                  userCtx.setCurrentPage("profile");
+                }}
+              >
                 My Profile
               </a>
             </li>
