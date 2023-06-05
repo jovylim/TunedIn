@@ -23,12 +23,14 @@ const Profile = (props) => {
   const expStartDateRef = useRef();
   const expEndDateRef = useRef();
   const [expUpdatingID, setExpUpdatingID] = useState();
+  const [followersData, setFollowersData] = useState([]);
+  const [followngData, setFollowingData] = useState([]);
 
-  console.log(props.userData);
-  console.log(props.userExperiences);
-  console.log(props.userContacts);
-  console.log(props.userFollowers);
-  console.log(props.userFollowing);
+  // console.log(props.userData);
+  // console.log(props.userExperiences);
+  // console.log(props.userContacts);
+  // console.log(props.userFollowers);
+  // console.log(props.userFollowing);
 
   const setProfileRefs = () => {
     profilePicRef.current.value = props.userData.profile_picture;
@@ -60,9 +62,9 @@ const Profile = (props) => {
       if (item.id === expID) {
         expTypeRef.current.value = item.type;
         expContentRef.current.value = item.content;
-        expStartDateRef.current.value = item.start_date;
+        expStartDateRef.current.value = item.start_date.slice(0, 10);
         if (item.end_date) {
-          expEndDateRef.current.value = item.end_date;
+          expEndDateRef.current.value = item.end_date.slice(0, 10);
         }
       }
     });
@@ -208,6 +210,7 @@ const Profile = (props) => {
       type: expTypeRef.current.value,
       content: expContentRef.current.value,
       start_date: expStartDateRef.current.value,
+      end_date: null,
     };
     console.log("patch");
     console.log(patchBody);
@@ -226,6 +229,78 @@ const Profile = (props) => {
     } else {
       console.log(data);
     }
+  };
+
+  const deleteExperience = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/delete-experience/" + expUpdatingID,
+      userCtx.accessToken,
+      "DELETE"
+    );
+
+    if (ok) {
+      props.getUserExperiences();
+    } else {
+      console.log(data);
+    }
+  };
+
+  const addExperience = async () => {
+    let addBody = {
+      user: userCtx.userUUID,
+      type: expTypeRef.current.value,
+      content: expContentRef.current.value,
+      start_date: expStartDateRef.current.value,
+    };
+    if (expEndDateRef.current.value !== "") {
+      addBody["end_date"] = expEndDateRef.current.value;
+    }
+    const { ok, data } = await fetchData(
+      "/routes/add-experience/",
+      userCtx.accessToken,
+      "PUT",
+      addBody
+    );
+
+    if (ok) {
+      props.getUserExperiences();
+    } else {
+      console.log(data);
+    }
+  };
+
+  const getThisUserFollowersData = async () => {
+    setFollowersData([]);
+    props.userFollowers.map(async (item) => {
+      const { ok, data } = await fetchData(
+        "/routes/get-one-user/" + item.user,
+        userCtx.accessToken,
+        "POST"
+      );
+
+      if (ok) {
+        setFollowersData((followersData) => [...followersData, data]);
+      } else {
+        console.log(data);
+      }
+    });
+  };
+
+  const getThisUserFollowingData = async () => {
+    setFollowingData([]);
+    props.userFollowing.map(async (item) => {
+      const { ok, data } = await fetchData(
+        "/routes/get-one-user/" + item.target_user,
+        userCtx.accessToken,
+        "POST"
+      );
+
+      if (ok) {
+        setFollowingData((followngData) => [...followngData, data]);
+      } else {
+        console.log(data);
+      }
+    });
   };
 
   const timeFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -279,7 +354,8 @@ const Profile = (props) => {
                 <div
                   className="stat place-items-center"
                   onClick={() => {
-                    console.log("clicked followers");
+                    getThisUserFollowersData();
+                    window.followers_modal.showModal();
                   }}
                 >
                   <div className="stat-title">Followers</div>
@@ -288,7 +364,8 @@ const Profile = (props) => {
                 <div
                   className="stat place-items-center"
                   onClick={() => {
-                    console.log("clicked folliwing");
+                    getThisUserFollowingData();
+                    window.following_modal.showModal();
                   }}
                 >
                   <div className="stat-title">Following</div>
@@ -320,7 +397,16 @@ const Profile = (props) => {
         </div>
         <div className="grid grid-cols-1 h-fit w-9/12">
           <div className="card bg-success h-fit py-10 rounded-none ">
-            <div className="font-bold text-4xl p-2">Experiences</div>
+            <div className="flex flex-row p-2">
+              <div className="font-bold text-4xl w-fit">Experiences</div>
+              <button
+                className="btn btn-outline btn-accent mx-4"
+                onClick={() => window.add_experience_modal.showModal()}
+              >
+                Add New Experience
+              </button>
+            </div>
+
             <div className="carousel">
               {props.userExperiences
                 .slice(0)
@@ -352,7 +438,10 @@ const Profile = (props) => {
                             </div>
                           )}
                           {item.end_date && (
-                            <div>End Date: {item.end_date}</div>
+                            <div className="text-xl text-center">
+                              End Date:{" "}
+                              {timeFormatter.format(new Date(item.end_date))}
+                            </div>
                           )}
                           <button
                             className="btn btn-outline btn-accent"
@@ -524,20 +613,20 @@ const Profile = (props) => {
               <span className="label-text">Start Date / Date Achieved</span>
             </label>
             <input
-              type="text"
+              type="date"
               ref={expStartDateRef}
-              placeholder="date in YYYY-MM-DD format"
               className="input input-bordered"
             />
           </div>
           <div className="form-control">
             <label className="label">
-              <span className="label-text">End Date</span>
+              <span className="label-text">
+                End Date (leave blank if not applicable)
+              </span>
             </label>
             <input
-              type="text"
+              type="date"
               ref={expEndDateRef}
-              placeholder="end date in YYYY-MM-DD format, leave blank if none"
               className="input input-bordered"
             />
           </div>
@@ -547,11 +636,151 @@ const Profile = (props) => {
             <button
               className="btn"
               onClick={() => {
+                window.delete_experience_modal.showModal();
+              }}
+            >
+              Delete
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
                 updateExperience();
               }}
             >
               Save
             </button>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="delete_experience_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <div className="font-bold text-xl">
+            Warning! Are you sure you want to delete this experience?
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                deleteExperience();
+              }}
+            >
+              Yes, DELETE
+            </button>
+            <button className="btn">CANCEL</button>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="add_experience_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <h3 className="font-bold text-2xl py-4">Edit My Experience</h3>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Type</span>
+            </label>
+            <select
+              className="select select-bordered w-full max-w-xs"
+              ref={expTypeRef}
+            >
+              <option disabled selected>
+                Experience Type
+              </option>
+              <option>ACHIEVEMENT</option>
+              <option>WORK</option>
+              <option>EDUCATION</option>
+            </select>
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Content</span>
+            </label>
+            <input
+              type="text"
+              ref={expContentRef}
+              placeholder="what happened?"
+              className="input input-bordered"
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Start Date / Date Achieved</span>
+            </label>
+            <input
+              type="date"
+              ref={expStartDateRef}
+              className="input input-bordered"
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">
+                End Date (leave blank if not applicable)
+              </span>
+            </label>
+            <input
+              type="date"
+              ref={expEndDateRef}
+              className="input input-bordered"
+            />
+          </div>
+          <div className="modal-action">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn">Cancel</button>
+            <button
+              className="btn"
+              onClick={() => {
+                addExperience();
+              }}
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="followers_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <div className="overflow-x-auto">
+            <div className="font-bold text-2xl">My Followers</div>
+            {followersData.map((item, idx) => {
+              return (
+                <div className="flex items-center space-x-3 py-2" key={idx}>
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <img src={item.profile_picture} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">{item.name}</div>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="modal-action">
+              <button className="btn">Close</button>
+            </div>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="following_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <div className="overflow-x-auto">
+            <div className="font-bold text-2xl">Following</div>
+            {followngData.map((item, idx) => {
+              return (
+                <div className="flex items-center space-x-3 py-2" key={idx}>
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <img src={item.profile_picture} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">{item.name}</div>
+                  </div>
+                </div>
+              );
+            })}
+            <div className="modal-action">
+              <button className="btn">Close</button>
+            </div>
           </div>
         </form>
       </dialog>

@@ -3,7 +3,6 @@ import UserContext from "../context/user";
 
 const Feed = (props) => {
   const userCtx = useContext(UserContext);
-  console.log(userCtx.userUUID);
 
   return <div>Feed</div>;
 };

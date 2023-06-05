@@ -344,32 +344,32 @@ class SeedExperiences(APIView):
         experience_one = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='ACHIEVEMENT',
                                      content='Grade 1 in Ballet',
-                                     start_date='2022-01-01 00:00+08')
+                                     start_date='2022-01-01')
         experience_one.save()
         experience_two = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='ACHIEVEMENT',
                                      content='Grade 2 in Ballet',
-                                     start_date='2022-05-01 00:00+08')
+                                     start_date='2022-05-01')
         experience_two.save()
         experience_three = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='ACHIEVEMENT',
                                      content='Grade 3 in Ballet',
-                                     start_date='2022-10-01 00:00+08')
+                                     start_date='2022-10-01')
         experience_three.save()
         experience_four = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='ACHIEVEMENT',
                                      content='Grade 4 in Ballet',
-                                     start_date='2023-01-01 00:00+08')
+                                     start_date='2023-01-01')
         experience_four.save()
         experience_four = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='WORK',
                                      content='Joined The Dance Company',
-                                     start_date='2023-02-01 00:00+08')
+                                     start_date='2023-02-01')
         experience_four.save()
         experience_five = Experiences(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
                                      type='ACHIEVEMENT',
                                      content='Grade 5 in Ballet',
-                                     start_date='2023-04-01 00:00+08')
+                                     start_date='2023-04-01')
         experience_five.save()
         return HttpResponse('created')
 
