@@ -286,15 +286,19 @@ class SeedPosts(APIView):
         post_two = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='TEXT',
                          content='so tired but i am practicing day and night. so excited for my upcoming live show. deets released soon!')
         post_two.save()
-        post_three = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='TEXT',
-                         content='i will be performing tonight! catch me live at this bar!')
+        post_three = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='PHOTO',
+                           content='i will be performing tonight! catch me live!',
+                           link='../../pictures/danceposter.jpeg')
         post_three.save()
-        post_four = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='TEXT',
-                         content='performance was a failure!!!!! :(')
+        post_four = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='VIDEO',
+                         content='my inspiration, my model, my idol...', link='https://www.youtube.com/watch?v=zV1qLYukTH8')
         post_four.save()
-        post_five = Posts(user=Users.objects.get(uuid='8f0770aa-c285-4dc6-b87a-ea6c377d13af'), type='JOB',
-                         content='need a new pole dancer. our previous one rage quit halfway during the show! serious candidates only! you will only be paid in exposure!')
+        post_five = Posts(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'), type='TEXT',
+                         content='performance was a failure!!!!! :(')
         post_five.save()
+        post_six = Posts(user=Users.objects.get(uuid='8f0770aa-c285-4dc6-b87a-ea6c377d13af'), type='JOB',
+                         content='need a new dancer. our previous one rage quit halfway during the show! serious candidates only! you will only be paid in exposure!')
+        post_six.save()
         return HttpResponse('created')
 
 
@@ -336,7 +340,6 @@ class SeedConnections(APIView):
                                      type='FOLLOWING')
         connection_four.save()
         return HttpResponse('created')
-
 
 class SeedExperiences(APIView):
     def get(self, request):

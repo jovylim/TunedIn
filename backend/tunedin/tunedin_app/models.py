@@ -60,6 +60,7 @@ class Posts(models.Model):
     type = models.CharField(max_length=5, choices=TYPE_CHOICES)
     timestamp = models.DateTimeField(verbose_name='timestamp', auto_now_add=True)
     content = models.CharField(max_length=500)
+    link = models.CharField(max_length=500, blank=True, default='')
     like_count = models.IntegerField(default=0)
     comment_count = models.IntegerField(default=0)
 

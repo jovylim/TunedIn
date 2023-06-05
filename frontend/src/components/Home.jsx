@@ -14,6 +14,7 @@ const Home = () => {
   const [userFollowing, setUserFollowing] = useState([]);
   const [userExperiences, setUserExperiences] = useState([]);
   const [userContacts, setUserContacts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
 
   const getUserData = async () => {
     const { ok, data } = await fetchData(
@@ -81,12 +82,26 @@ const Home = () => {
     }
   };
 
+  const getUserPosts = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-posts/" + userCtx.targetUserUUID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserPosts(data);
+    } else {
+      console.log(data);
+    }
+  };
+
   useEffect(() => {
     getUserData();
     getUserFollowers();
     getUserFollowing();
     getUserExperiences();
     getUserContacts();
+    getUserPosts();
   }, []);
 
   useEffect(() => {
@@ -95,6 +110,7 @@ const Home = () => {
     getUserFollowing();
     getUserExperiences();
     getUserContacts();
+    getUserPosts();
   }, [userCtx.targetUserUUID]);
 
   return (
@@ -110,9 +126,11 @@ const Home = () => {
           userFollowing={userFollowing}
           userExperiences={userExperiences}
           userContacts={userContacts}
+          userPosts={userPosts}
           getUserData={getUserData}
           getUserContacts={getUserContacts}
           getUserExperiences={getUserExperiences}
+          getUserPosts={getUserPosts}
         />
       )}
     </>

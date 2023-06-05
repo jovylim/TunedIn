@@ -23,15 +23,20 @@ const Profile = (props) => {
   const expContentRef = useRef();
   const expStartDateRef = useRef();
   const expEndDateRef = useRef();
+  const postTypeRef = useRef();
+  const postContentRef = useRef();
+  const postLinkRef = useRef();
   const [expUpdatingID, setExpUpdatingID] = useState();
+  const [postSelectedID, setPostSelectedID] = useState();
   const [followersData, setFollowersData] = useState([]);
   const [followngData, setFollowingData] = useState([]);
 
-  // console.log(props.userData);
+  console.log(props.userData);
   // console.log(props.userExperiences);
   // console.log(props.userContacts);
   // console.log(props.userFollowers);
   // console.log(props.userFollowing);
+  // console.log(props.userPosts);
 
   const setProfileRefs = () => {
     profilePicRef.current.value = props.userData.profile_picture;
@@ -304,6 +309,41 @@ const Profile = (props) => {
     });
   };
 
+  const addPost = async () => {
+    let addBody = {
+      user: userCtx.userUUID,
+      type: postTypeRef.current.value,
+      content: postContentRef.current.value,
+      link: postLinkRef.current.value,
+    };
+    const { ok, data } = await fetchData(
+      "/routes/add-post/",
+      userCtx.accessToken,
+      "PUT",
+      addBody
+    );
+
+    if (ok) {
+      props.getUserPosts();
+    } else {
+      console.log(data);
+    }
+  };
+
+  const deletePost = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/delete-post/" + postSelectedID,
+      userCtx.accessToken,
+      "DELETE"
+    );
+
+    if (ok) {
+      props.getUserPosts();
+    } else {
+      console.log(data);
+    }
+  };
+
   const timeFormatter = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long", //short gives 05/06/2023
     // timeStyle: "short",
@@ -332,7 +372,7 @@ const Profile = (props) => {
   return (
     <>
       <div className="flex w-full">
-        <div className="flex w-3/12 h-screen bg-accent">
+        <div className="flex w-3/12 h-full bg-accent">
           <div className="grid h-fit p-10 flex-auto card rounded-none">
             <div className="grid h-fit card">
               <div className="avatar flex align-middle">
@@ -399,21 +439,92 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="grid grid-cols-1 h-fit w-9/12">
-          <div className="card bg-success h-fit py-10 rounded-none ">
+          {!props.userData.is_business && (
+            <div className="card bg-success h-fit py-2 rounded-none ">
+              <div className="flex flex-row p-2">
+                <div className="font-bold text-4xl w-fit">Experiences</div>
+                {userCtx.userUUID === userCtx.targetUserUUID && (
+                  <button
+                    className="btn btn-outline btn-accent mx-4"
+                    onClick={() => window.add_experience_modal.showModal()}
+                  >
+                    Add New Experience
+                  </button>
+                )}
+              </div>
+              <div className="carousel">
+                {props.userExperiences
+                  .slice(0)
+                  .reverse()
+                  .map((item, idx) => {
+                    return (
+                      <div
+                        id={"slide" + idx}
+                        key={idx}
+                        className="carousel-item p-3 h-fit w-1/3"
+                      >
+                        <div className="card w-full bg-base-300">
+                          <div className="card-body">
+                            <div className="font-medium text-3xl text-center">
+                              {item.type}
+                            </div>
+                            <div className="font-medium text-2xl text-center">
+                              {item.content}
+                            </div>
+                            {item.type === "ACHIEVEMENT" && (
+                              <div className="text-xl text-center">
+                                {timeFormatter.format(
+                                  new Date(item.start_date)
+                                )}
+                              </div>
+                            )}
+                            {item.type !== "ACHIEVEMENT" && (
+                              <div className="text-xl text-center">
+                                Start Date:{" "}
+                                {timeFormatter.format(
+                                  new Date(item.start_date)
+                                )}
+                              </div>
+                            )}
+                            {item.end_date && (
+                              <div className="text-xl text-center">
+                                End Date:{" "}
+                                {timeFormatter.format(new Date(item.end_date))}
+                              </div>
+                            )}
+                            {userCtx.userUUID === userCtx.targetUserUUID && (
+                              <button
+                                className="btn btn-outline btn-accent"
+                                onClick={() => {
+                                  setExpRefs(item.id);
+                                  window.edit_experience_modal.showModal();
+                                }}
+                              >
+                                edit
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
+          <div className="card bg-warning h-fit py-2 rounded-none">
             <div className="flex flex-row p-2">
-              <div className="font-bold text-4xl w-fit">Experiences</div>
+              <div className="font-bold text-4xl w-fit">Posts</div>
               {userCtx.userUUID === userCtx.targetUserUUID && (
                 <button
                   className="btn btn-outline btn-accent mx-4"
-                  onClick={() => window.add_experience_modal.showModal()}
+                  onClick={() => window.new_post_modal.showModal()}
                 >
-                  Add New Experience
+                  New Post
                 </button>
               )}
             </div>
-
             <div className="carousel">
-              {props.userExperiences
+              {props.userPosts
                 .slice(0)
                 .reverse()
                 .map((item, idx) => {
@@ -425,47 +536,33 @@ const Profile = (props) => {
                     >
                       <div className="card w-full bg-base-300">
                         <div className="card-body">
-                          <div className="font-medium text-3xl text-center">
-                            {item.type}
-                          </div>
+                          {item.type === "PHOTO" && <img src={item.link}></img>}
+                          {item.type === "VIDEO" && (
+                            <a className="link">{item.link}</a>
+                          )}
                           <div className="font-medium text-2xl text-center">
                             {item.content}
                           </div>
-                          {item.type === "ACHIEVEMENT" && (
-                            <div className="text-xl text-center">
-                              {timeFormatter.format(new Date(item.start_date))}
-                            </div>
+                          <div className="text-xl text-center">
+                            {timeFormatter.format(new Date(item.timestamp))}
+                          </div>
+                          {userCtx.userUUID === userCtx.targetUserUUID && (
+                            <button
+                              className="btn btn-outline btn-accent"
+                              onClick={() => {
+                                setPostSelectedID(item.uuid);
+                                window.delete_post_modal.showModal();
+                              }}
+                            >
+                              delete
+                            </button>
                           )}
-                          {item.type !== "ACHIEVEMENT" && (
-                            <div className="text-xl text-center">
-                              Start Date:{" "}
-                              {timeFormatter.format(new Date(item.start_date))}
-                            </div>
-                          )}
-                          {item.end_date && (
-                            <div className="text-xl text-center">
-                              End Date:{" "}
-                              {timeFormatter.format(new Date(item.end_date))}
-                            </div>
-                          )}
-                          <button
-                            className="btn btn-outline btn-accent"
-                            onClick={() => {
-                              setExpRefs(item.id);
-                              window.edit_experience_modal.showModal();
-                            }}
-                          >
-                            edit
-                          </button>
                         </div>
                       </div>
                     </div>
                   );
                 })}
             </div>
-          </div>
-          <div className="grid flex-grow card bg-warning rounded-none">
-            <div className="font-bold text-4xl p-2">Posts</div>
           </div>
         </div>
       </div>
@@ -804,6 +901,79 @@ const Profile = (props) => {
             <div className="modal-action">
               <button className="btn">Close</button>
             </div>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="new_post_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <h3 className="font-bold text-2xl py-4">New Post</h3>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Type</span>
+            </label>
+            <select
+              className="select select-bordered w-full max-w-xs"
+              ref={postTypeRef}
+            >
+              <option disabled selected>
+                Post Type
+              </option>
+              <option>TEXT</option>
+              <option>PHOTO</option>
+              <option>VIDEO</option>
+              {props.userData.is_business && <option>JOB</option>}
+            </select>
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Content</span>
+            </label>
+            <input
+              type="text"
+              ref={postContentRef}
+              placeholder="what happened?"
+              className="input input-bordered"
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Link</span>
+            </label>
+            <input
+              type="text"
+              ref={postLinkRef}
+              placeholder="link to image/video. please choose correct post type."
+              className="input input-bordered"
+            />
+          </div>
+          <div className="modal-action">
+            <button className="btn">Cancel</button>
+            <button
+              className="btn"
+              onClick={() => {
+                addPost();
+              }}
+            >
+              Post!
+            </button>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="delete_post_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <div className="font-bold text-xl">
+            Warning! Are you sure you want to delete this post?
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                deletePost();
+              }}
+            >
+              Yes, DELETE
+            </button>
+            <button className="btn">CANCEL</button>
           </div>
         </form>
       </dialog>
