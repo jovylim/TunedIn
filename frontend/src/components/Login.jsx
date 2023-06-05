@@ -17,7 +17,6 @@ const Login = (props) => {
     if (ok) {
       userCtx.setAccessToken(data.access);
       const decoded = jwt_decode(data.access);
-      console.log(decoded);
       userCtx.setUserUUID(decoded.user_id);
       userCtx.setTargetUserUUID(decoded.user_id);
     } else {

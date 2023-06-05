@@ -15,6 +15,8 @@ const Home = () => {
   const [userExperiences, setUserExperiences] = useState([]);
   const [userContacts, setUserContacts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
+  const [followingTarget, setFollowingTarget] = useState(false);
+  const [connectionID, setConnectionID] = useState();
 
   const getUserData = async () => {
     const { ok, data } = await fetchData(
@@ -95,6 +97,17 @@ const Home = () => {
     }
   };
 
+  const checkFollowing = () => {
+    setFollowingTarget(false);
+    const temp = userFollowing.find(
+      (e) => e.target_user === userCtx.targetUserUUID
+    );
+    if (temp) {
+      setFollowingTarget(true);
+      setConnectionID(temp.id);
+    }
+  };
+
   useEffect(() => {
     getUserData();
     getUserFollowers();
@@ -111,12 +124,15 @@ const Home = () => {
     getUserExperiences();
     getUserContacts();
     getUserPosts();
+    checkFollowing();
   }, [userCtx.targetUserUUID]);
 
   return (
     <>
       <Navbar />
-      {userCtx.currentPage === "home" && <Feed userData={userData} />}
+      {userCtx.currentPage === "home" && (
+        <Feed userData={userData} userFollowing={userFollowing} />
+      )}
       {userCtx.currentPage === "jobs" && <Jobs userData={userData} />}
       {userCtx.currentPage === "messaging" && <Messaging userData={userData} />}
       {userCtx.currentPage === "profile" && (
@@ -131,6 +147,11 @@ const Home = () => {
           getUserContacts={getUserContacts}
           getUserExperiences={getUserExperiences}
           getUserPosts={getUserPosts}
+          followingTarget={followingTarget}
+          setFollowingTarget={setFollowingTarget}
+          getUserFollowers={getUserFollowers}
+          connectionID={connectionID}
+          checkFollowing={checkFollowing}
         />
       )}
     </>

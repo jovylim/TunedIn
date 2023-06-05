@@ -31,7 +31,8 @@ const Profile = (props) => {
   const [followersData, setFollowersData] = useState([]);
   const [followngData, setFollowingData] = useState([]);
 
-  console.log(props.userData);
+  // console.log(props.followingTarget);
+  // console.log(props.userData);
   // console.log(props.userExperiences);
   // console.log(props.userContacts);
   // console.log(props.userFollowers);
@@ -344,6 +345,41 @@ const Profile = (props) => {
     }
   };
 
+  const followUser = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/add-connection/",
+      userCtx.accessToken,
+      "PUT",
+      {
+        user: userCtx.userUUID,
+        target_user: userCtx.targetUserUUID,
+        type: "FOLLOWING",
+      }
+    );
+
+    if (ok) {
+      props.getUserFollowers();
+      props.setFollowingTarget(true);
+    } else {
+      console.log(data);
+    }
+  };
+
+  const unfollowUser = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/delete-connection/" + props.connectionID,
+      userCtx.accessToken,
+      "DELETE"
+    );
+
+    if (ok) {
+      props.getUserFollowers();
+      props.setFollowingTarget(false);
+    } else {
+      console.log(data);
+    }
+  };
+
   const timeFormatter = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long", //short gives 05/06/2023
     // timeStyle: "short",
@@ -374,7 +410,22 @@ const Profile = (props) => {
       <div className="flex h-full w-full ">
         <div className="flex h-200 w-3/12 bg-accent">
           <div className="grid p-10 h-fit flex-auto card rounded-none">
-            <div className="grid card">
+            {userCtx.userUUID !== userCtx.targetUserUUID &&
+              props.followingTarget && (
+                <button className="btn" onClick={() => unfollowUser()}>
+                  Following
+                </button>
+              )}
+            {userCtx.userUUID !== userCtx.targetUserUUID &&
+              !props.followingTarget && (
+                <button
+                  className="btn btn-outline"
+                  onClick={() => followUser()}
+                >
+                  Follow
+                </button>
+              )}
+            <div className="grid card p-3">
               <div className="avatar flex align-middle">
                 <div className="w-auto rounded-full">
                   <img src={props.userData.profile_picture} />
