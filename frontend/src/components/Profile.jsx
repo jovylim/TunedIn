@@ -219,8 +219,6 @@ const Profile = (props) => {
       start_date: expStartDateRef.current.value,
       end_date: null,
     };
-    console.log("patch");
-    console.log(patchBody);
     if (expEndDateRef.current.value !== "") {
       patchBody["end_date"] = expEndDateRef.current.value;
     }
@@ -347,10 +345,8 @@ const Profile = (props) => {
 
   const checkFollower = () => {
     props.setConnectionID(null);
-    console.log(props.userFollowers);
     const temp = props.userFollowers.find((e) => e.user === userCtx.userUUID);
     if (temp) {
-      console.log("hello");
       props.setConnectionID(temp.id);
     }
   };
@@ -424,14 +420,12 @@ const Profile = (props) => {
         <div className="flex h-200 w-3/12 bg-accent">
           <div className="grid p-10 h-fit flex-auto card rounded-none">
             {userCtx.userUUID !== userCtx.targetUserUUID &&
-              // props.followingTarget
               props.connectionID && (
                 <button className="btn" onClick={() => unfollowUser()}>
                   Following
                 </button>
               )}
             {userCtx.userUUID !== userCtx.targetUserUUID &&
-              // !props.followingTarget
               !props.connectionID && (
                 <button
                   className="btn btn-outline"
