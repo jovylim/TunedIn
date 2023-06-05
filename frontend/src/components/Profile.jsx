@@ -371,10 +371,10 @@ const Profile = (props) => {
 
   return (
     <>
-      <div className="flex w-full">
-        <div className="flex w-3/12 h-full bg-accent">
-          <div className="grid h-fit p-10 flex-auto card rounded-none">
-            <div className="grid h-fit card">
+      <div className="flex h-full w-full ">
+        <div className="flex h-200 w-3/12 bg-accent">
+          <div className="grid p-10 h-fit flex-auto card rounded-none">
+            <div className="grid card">
               <div className="avatar flex align-middle">
                 <div className="w-auto rounded-full">
                   <img src={props.userData.profile_picture} />
@@ -439,78 +439,74 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="grid grid-cols-1 h-fit w-9/12">
-          {!props.userData.is_business && (
-            <div className="card bg-success h-fit py-2 rounded-none ">
-              <div className="flex flex-row p-2">
-                <div className="font-bold text-4xl w-fit">Experiences</div>
-                {userCtx.userUUID === userCtx.targetUserUUID && (
-                  <button
-                    className="btn btn-outline btn-accent mx-4"
-                    onClick={() => window.add_experience_modal.showModal()}
-                  >
-                    Add New Experience
-                  </button>
-                )}
-              </div>
-              <div className="carousel">
-                {props.userExperiences
-                  .slice(0)
-                  .reverse()
-                  .map((item, idx) => {
-                    return (
-                      <div
-                        id={"slide" + idx}
-                        key={idx}
-                        className="carousel-item p-3 h-fit w-1/3"
-                      >
-                        <div className="card w-full bg-base-300">
-                          <div className="card-body">
-                            <div className="font-medium text-3xl text-center">
-                              {item.type}
-                            </div>
-                            <div className="font-medium text-2xl text-center">
-                              {item.content}
-                            </div>
-                            {item.type === "ACHIEVEMENT" && (
-                              <div className="text-xl text-center">
-                                {timeFormatter.format(
-                                  new Date(item.start_date)
-                                )}
-                              </div>
-                            )}
-                            {item.type !== "ACHIEVEMENT" && (
-                              <div className="text-xl text-center">
-                                Start Date:{" "}
-                                {timeFormatter.format(
-                                  new Date(item.start_date)
-                                )}
-                              </div>
-                            )}
-                            {item.end_date && (
-                              <div className="text-xl text-center">
-                                End Date:{" "}
-                                {timeFormatter.format(new Date(item.end_date))}
-                              </div>
-                            )}
-                            {userCtx.userUUID === userCtx.targetUserUUID && (
-                              <button
-                                className="btn btn-outline btn-accent"
-                                onClick={() => {
-                                  setExpRefs(item.id);
-                                  window.edit_experience_modal.showModal();
-                                }}
-                              >
-                                edit
-                              </button>
-                            )}
+          {/* {!props.userData.is_business && ( */}
+          <div className="card bg-success h-fit py-2 rounded-none">
+            <div className="flex flex-row p-2">
+              <div className="font-bold text-4xl w-fit">Experiences</div>
+              {userCtx.userUUID === userCtx.targetUserUUID && (
+                <button
+                  className="btn btn-outline btn-accent mx-4"
+                  onClick={() => window.add_experience_modal.showModal()}
+                >
+                  Add New Experience
+                </button>
+              )}
+            </div>
+            <div className="carousel">
+              {props.userExperiences
+                .slice(0)
+                .reverse()
+                .map((item, idx) => {
+                  return (
+                    <div
+                      id={"slide" + idx}
+                      key={idx}
+                      className="carousel-item p-3 h-fit w-1/3"
+                    >
+                      <div className="card w-full bg-base-300">
+                        <div className="card-body">
+                          <div className="font-medium text-3xl text-center">
+                            {item.type}
                           </div>
+                          <div className="font-medium text-2xl text-center">
+                            {item.content}
+                          </div>
+                          {item.type === "ACHIEVEMENT" && (
+                            <div className="text-xl text-center">
+                              {timeFormatter.format(new Date(item.start_date))}
+                            </div>
+                          )}
+                          {item.type !== "ACHIEVEMENT" && (
+                            <div className="text-xl text-center">
+                              Start Date:{" "}
+                              {timeFormatter.format(new Date(item.start_date))}
+                            </div>
+                          )}
+                          {item.end_date && (
+                            <div className="text-xl text-center">
+                              End Date:{" "}
+                              {timeFormatter.format(new Date(item.end_date))}
+                            </div>
+                          )}
+                          {userCtx.userUUID === userCtx.targetUserUUID && (
+                            <button
+                              className="btn btn-outline btn-accent"
+                              onClick={() => {
+                                setExpRefs(item.id);
+                                window.edit_experience_modal.showModal();
+                              }}
+                            >
+                              edit
+                            </button>
+                          )}
                         </div>
                       </div>
-                    );
-                  })}
-              </div>
+                    </div>
+                  );
+                })}
             </div>
-          )}
+          </div>
+          {/* )} */}
           <div className="card bg-warning h-fit py-2 rounded-none">
             <div className="flex flex-row p-2">
               <div className="font-bold text-4xl w-fit">Posts</div>
@@ -539,6 +535,11 @@ const Profile = (props) => {
                           {item.type === "PHOTO" && <img src={item.link}></img>}
                           {item.type === "VIDEO" && (
                             <a className="link">{item.link}</a>
+                          )}
+                          {item.type === "JOB" && (
+                            <div className="font-medium text-3xl text-center">
+                              JOB POST
+                            </div>
                           )}
                           <div className="font-medium text-2xl text-center">
                             {item.content}
