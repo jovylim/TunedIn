@@ -346,13 +346,11 @@ const Profile = (props) => {
   };
 
   const checkFollower = () => {
-    // setFollowingTarget(false);
     props.setConnectionID(null);
     console.log(props.userFollowers);
     const temp = props.userFollowers.find((e) => e.user === userCtx.userUUID);
     if (temp) {
       console.log("hello");
-      // setFollowingTarget(true);
       props.setConnectionID(temp.id);
     }
   };
@@ -371,8 +369,6 @@ const Profile = (props) => {
 
     if (ok) {
       props.getUserFollowers();
-      // checkFollower();
-      // props.setFollowingTarget(true);
     } else {
       console.log(data);
     }
@@ -388,7 +384,6 @@ const Profile = (props) => {
     if (ok) {
       props.getUserFollowers();
       props.setConnectionID(null);
-      // props.setFollowingTarget(false);
     } else {
       console.log(data);
     }
