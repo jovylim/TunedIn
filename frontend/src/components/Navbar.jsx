@@ -19,9 +19,9 @@ const Navbar = () => {
             <li>
               <a onClick={() => userCtx.setCurrentPage("home")}>Home</a>
             </li>
-            {/* <li>
+            <li>
               <a onClick={() => userCtx.setCurrentPage("jobs")}>Jobs</a>
-            </li> */}
+            </li>
             <li>
               <a onClick={() => userCtx.setCurrentPage("messaging")}>
                 Messaging

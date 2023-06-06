@@ -581,8 +581,9 @@ const Profile = (props) => {
             </div>
             <div className="carousel">
               {props.userPosts
-                .slice(0)
-                .reverse()
+                .sort((a, b) => {
+                  return new Date(b.timestamp) - new Date(a.timestamp);
+                })
                 .map((item, idx) => {
                   return (
                     <div

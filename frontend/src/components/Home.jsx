@@ -18,6 +18,7 @@ const Home = () => {
   const [userPostsReactions, setUserPostsReactions] = useState([]);
   const [connectionID, setConnectionID] = useState(null);
   const [userFeed, setUserFeed] = useState([]);
+  const [userFeedProfiles, setUserFeedProfiles] = useState([]);
   const [getFeedFlag, setGetFeedFlag] = useState(false);
 
   const getUserData = async () => {
@@ -114,13 +115,11 @@ const Home = () => {
 
   const getUserFeed = () => {
     setUserFeed([]);
+    setUserFeedProfiles([]);
     userFollowing.map((item) => {
       getFollowingUserPosts(item.target_user);
+      getFollowingUserProfile(item.target_user);
     });
-    userFeed.sort((a, b) => {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-    console.log(userFeed);
   };
 
   const getFollowingUserPosts = async (targetID) => {
@@ -136,6 +135,20 @@ const Home = () => {
     }
   };
 
+  const getFollowingUserProfile = async (targetID) => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user/" + targetID,
+      userCtx.accessToken,
+      "POST"
+    );
+
+    if (ok) {
+      setUserFeedProfiles((userFeedProfiles) => [...userFeedProfiles, data]);
+    } else {
+      console.log(data);
+    }
+  };
+
   useEffect(() => {
     getUserData();
     getUserFollowers();
@@ -144,7 +157,6 @@ const Home = () => {
     getUserContacts();
     getUserPosts();
     checkFollowing();
-    // getUserFeed();
   }, []);
 
   useEffect(() => {
@@ -165,9 +177,19 @@ const Home = () => {
     <>
       <Navbar />
       {userCtx.currentPage === "home" && (
-        <Feed userData={userData} userFeed={userFeed} />
+        <Feed
+          userData={userData}
+          userFeed={userFeed}
+          userFeedProfiles={userFeedProfiles}
+        />
       )}
-      {/* {userCtx.currentPage === "jobs" && <Jobs userData={userData} />} */}
+      {userCtx.currentPage === "jobs" && (
+        <Jobs
+          userData={userData}
+          userFeed={userFeed}
+          userFeedProfiles={userFeedProfiles}
+        />
+      )}
       {userCtx.currentPage === "messaging" && <Messaging userData={userData} />}
       {userCtx.currentPage === "profile" && (
         <Profile
