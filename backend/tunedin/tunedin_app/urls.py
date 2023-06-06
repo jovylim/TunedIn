@@ -10,6 +10,7 @@ urlpatterns = [
     path('seed-contacts/', views.SeedContacts.as_view(), name='seed-contacts'),
     path('seed-connections/', views.SeedConnections.as_view(), name='seed-connections'),
     path('seed-experiences/', views.SeedExperiences.as_view(), name='seed-experiences'),
+    path('seed-post-reactions/', views.SeedPostReactions.as_view(), name='seed-post-reactions'),
     path('get-all-users/', views.AllUsers.as_view(), name='all-users'),
     path('get-one-user/<str:pk>', views.OneUser.as_view(), name='one-user'),
     path('add-user/', views.AddUser.as_view(), name='add-user'),

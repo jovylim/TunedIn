@@ -31,14 +31,6 @@ const Profile = (props) => {
   const [followersData, setFollowersData] = useState([]);
   const [followngData, setFollowingData] = useState([]);
 
-  // console.log(props.followingTarget);
-  // console.log(props.userData);
-  // console.log(props.userExperiences);
-  // console.log(props.userContacts);
-  // console.log(props.userFollowers);
-  // console.log(props.userFollowing);
-  // console.log(props.userPosts);
-
   const setProfileRefs = () => {
     profilePicRef.current.value = props.userData.profile_picture;
     nameRef.current.value = props.userData.name;
@@ -65,16 +57,14 @@ const Profile = (props) => {
 
   const setExpRefs = (expID) => {
     setExpUpdatingID(expID);
-    props.userExperiences.map((item) => {
-      if (item.id === expID) {
-        expTypeRef.current.value = item.type;
-        expContentRef.current.value = item.content;
-        expStartDateRef.current.value = item.start_date.slice(0, 10);
-        if (item.end_date) {
-          expEndDateRef.current.value = item.end_date.slice(0, 10);
-        }
-      }
-    });
+    const temp = props.userExperiences.find((e) => e.id === expID);
+    expTypeRef.current.value = temp.type;
+    expContentRef.current.value = temp.content;
+    expStartDateRef.current.value = temp.start_date.slice(0, 10);
+    if (temp.end_date) {
+      expEndDateRef.current.value = temp.end_date.slice(0, 10);
+    }
+    window.edit_experience_modal.showModal();
   };
 
   const updateInfo = async () => {
@@ -308,6 +298,19 @@ const Profile = (props) => {
     });
   };
 
+  const getPostReactions = async (postID) => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-post-post-reactions/" + postID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      //HERE
+    } else {
+      console.log(data);
+    }
+  };
+
   const addPost = async () => {
     let addBody = {
       user: userCtx.userUUID,
@@ -499,7 +502,6 @@ const Profile = (props) => {
           </div>
         </div>
         <div className="grid grid-cols-1 h-fit w-9/12">
-          {/* {!props.userData.is_business && ( */}
           <div className="card bg-success h-fit py-2 rounded-none">
             <div className="flex flex-row p-2">
               <div className="font-bold text-4xl w-fit">Experiences</div>
@@ -550,10 +552,9 @@ const Profile = (props) => {
                           )}
                           {userCtx.userUUID === userCtx.targetUserUUID && (
                             <button
-                              className="btn btn-outline btn-accent"
+                              className="btn btn-outline btn-xs btn-accent"
                               onClick={() => {
                                 setExpRefs(item.id);
-                                window.edit_experience_modal.showModal();
                               }}
                             >
                               edit
@@ -566,7 +567,6 @@ const Profile = (props) => {
                 })}
             </div>
           </div>
-          {/* )} */}
           <div className="card bg-warning h-fit py-2 rounded-none">
             <div className="flex flex-row p-2">
               <div className="font-bold text-4xl w-fit">Posts</div>
@@ -607,9 +607,37 @@ const Profile = (props) => {
                           <div className="text-xl text-center">
                             {timeFormatter.format(new Date(item.timestamp))}
                           </div>
-                          {userCtx.userUUID === userCtx.targetUserUUID && (
+                          <div className="flex flex-row justify-center space-x-2">
                             <button
                               className="btn btn-outline btn-accent"
+                              onClick={() => {}}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                />
+                              </svg>
+                              {item.like_count}
+                            </button>
+                            <button
+                              className="btn btn-outline btn-accent"
+                              onClick={() => {}}
+                            >
+                              comments {item.comment_count}
+                            </button>
+                          </div>
+                          {userCtx.userUUID === userCtx.targetUserUUID && (
+                            <button
+                              className="btn btn-xs btn-outline btn-accent"
                               onClick={() => {
                                 setPostSelectedID(item.uuid);
                                 window.delete_post_modal.showModal();
@@ -835,7 +863,7 @@ const Profile = (props) => {
       </dialog>
       <dialog id="add_experience_modal" className="modal">
         <form method="dialog" className="modal-box">
-          <h3 className="font-bold text-2xl py-4">Edit My Experience</h3>
+          <h3 className="font-bold text-2xl py-4">Add New Experience</h3>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Type</span>

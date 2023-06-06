@@ -15,8 +15,10 @@ const Home = () => {
   const [userExperiences, setUserExperiences] = useState([]);
   const [userContacts, setUserContacts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
-  // const [followingTarget, setFollowingTarget] = useState(false);
+  const [userPostsReactions, setUserPostsReactions] = useState([]);
   const [connectionID, setConnectionID] = useState(null);
+  const [userFeed, setUserFeed] = useState([]);
+  const [getFeedFlag, setGetFeedFlag] = useState(false);
 
   const getUserData = async () => {
     const { ok, data } = await fetchData(
@@ -53,6 +55,7 @@ const Home = () => {
 
     if (ok) {
       setUserFollowing(data);
+      setGetFeedFlag(true);
     } else {
       console.log(data);
     }
@@ -109,6 +112,30 @@ const Home = () => {
     }
   };
 
+  const getUserFeed = () => {
+    setUserFeed([]);
+    userFollowing.map((item) => {
+      getFollowingUserPosts(item.target_user);
+    });
+    userFeed.sort((a, b) => {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+    console.log(userFeed);
+  };
+
+  const getFollowingUserPosts = async (targetID) => {
+    const { ok, data } = await fetchData(
+      "/routes/get-one-user-posts/" + targetID,
+      userCtx.accessToken
+    );
+
+    if (ok) {
+      setUserFeed((userFeed) => [...userFeed, ...data]);
+    } else {
+      console.log(data);
+    }
+  };
+
   useEffect(() => {
     getUserData();
     getUserFollowers();
@@ -117,6 +144,7 @@ const Home = () => {
     getUserContacts();
     getUserPosts();
     checkFollowing();
+    // getUserFeed();
   }, []);
 
   useEffect(() => {
@@ -129,13 +157,17 @@ const Home = () => {
     checkFollowing();
   }, [userCtx.targetUserUUID]);
 
+  useEffect(() => {
+    getUserFeed();
+  }, [getFeedFlag]);
+
   return (
     <>
       <Navbar />
       {userCtx.currentPage === "home" && (
-        <Feed userData={userData} userFollowing={userFollowing} />
+        <Feed userData={userData} userFeed={userFeed} />
       )}
-      {userCtx.currentPage === "jobs" && <Jobs userData={userData} />}
+      {/* {userCtx.currentPage === "jobs" && <Jobs userData={userData} />} */}
       {userCtx.currentPage === "messaging" && <Messaging userData={userData} />}
       {userCtx.currentPage === "profile" && (
         <Profile
@@ -149,8 +181,6 @@ const Home = () => {
           getUserContacts={getUserContacts}
           getUserExperiences={getUserExperiences}
           getUserPosts={getUserPosts}
-          // followingTarget={followingTarget}
-          // setFollowingTarget={setFollowingTarget}
           getUserFollowers={getUserFollowers}
           connectionID={connectionID}
           setConnectionID={setConnectionID}

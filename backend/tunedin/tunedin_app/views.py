@@ -341,6 +341,7 @@ class SeedConnections(APIView):
         connection_four.save()
         return HttpResponse('created')
 
+
 class SeedExperiences(APIView):
     def get(self, request):
         Experiences.objects.all().delete()
@@ -374,6 +375,29 @@ class SeedExperiences(APIView):
                                      content='Grade 5 in Ballet',
                                      start_date='2023-04-01')
         experience_five.save()
+        return HttpResponse('created')
+
+
+class SeedPostReactions(APIView):
+    def get(self, request):
+        PostReactions.objects.all().delete()
+        reaction_one = PostReactions(user=Users.objects.get(uuid='36e1189c-782c-40eb-85df-312f96fe1b2b'),
+                                     post=Posts.objects.get(uuid='d2fd289b-2bde-424d-b947-9e10c46805da'),
+                                     type='LIKE')
+        reaction_one.save()
+        reaction_two = PostReactions(user=Users.objects.get(uuid='5a694ec5-0bae-4df6-a1b5-47482e8a7d4d'),
+                                     post=Posts.objects.get(uuid='d2fd289b-2bde-424d-b947-9e10c46805da'),
+                                     type='LIKE')
+        reaction_two.save()
+        reaction_three = PostReactions(user=Users.objects.get(uuid='5d64d525-731e-4d05-a245-aeeb16ae2f24'),
+                                     post=Posts.objects.get(uuid='d2fd289b-2bde-424d-b947-9e10c46805da'),
+                                     type='LIKE')
+        reaction_three.save()
+        reaction_four = PostReactions(user=Users.objects.get(uuid='5a694ec5-0bae-4df6-a1b5-47482e8a7d4d'),
+                                     post=Posts.objects.get(uuid='d2fd289b-2bde-424d-b947-9e10c46805da'),
+                                     type='COMMENT',
+                                     comment='oh no!!! what happened?!')
+        reaction_four.save()
         return HttpResponse('created')
 
 
