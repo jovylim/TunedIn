@@ -20,7 +20,7 @@ const Jobs = (props) => {
   });
 
   return (
-    <div className="card bg-warning h-screen py-2 rounded-none">
+    <div className="card bg-success h-screen py-2 rounded-none">
       <div className="flex flex-row p-2">
         <div className="font-bold text-3xl w-fit">
           Job Posts from Businesses You Follow

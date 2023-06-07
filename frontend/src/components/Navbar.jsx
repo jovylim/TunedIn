@@ -5,7 +5,7 @@ const Navbar = () => {
   const userCtx = useContext(UserContext);
   return (
     <>
-      <div className="navbar bg-primary">
+      <div className="navbar bg-secondary">
         <div className="flex-1">
           <a
             className="btn btn-ghost normal-case text-3xl"
@@ -22,11 +22,11 @@ const Navbar = () => {
             <li>
               <a onClick={() => userCtx.setCurrentPage("jobs")}>Jobs</a>
             </li>
-            <li>
+            {/* <li>
               <a onClick={() => userCtx.setCurrentPage("messaging")}>
                 Messaging
               </a>
-            </li>
+            </li> */}
             <li>
               <a
                 onClick={() => {

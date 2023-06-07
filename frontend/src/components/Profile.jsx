@@ -430,7 +430,7 @@ const Profile = (props) => {
   return (
     <>
       <div className="flex h-full w-full ">
-        <div className="flex h-200 w-3/12 bg-accent">
+        <div className="flex h-200 w-3/12 bg-primary">
           <div className="grid p-10 h-fit flex-auto card rounded-none">
             {userCtx.userUUID !== userCtx.targetUserUUID &&
               props.connectionID && (
@@ -464,7 +464,7 @@ const Profile = (props) => {
             </div>
             <br />
             <div className="grid h-fit card">
-              <div className="stats bg-info cursor-pointer">
+              <div className="stats bg-accent cursor-pointer">
                 <div
                   className="stat place-items-center"
                   onClick={() => {
