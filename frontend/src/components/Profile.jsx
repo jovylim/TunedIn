@@ -23,6 +23,10 @@ const Profile = (props) => {
   const expContentRef = useRef();
   const expStartDateRef = useRef();
   const expEndDateRef = useRef();
+  const addExpTypeRef = useRef();
+  const addExpContentRef = useRef();
+  const addExpStartDateRef = useRef();
+  const addExpEndDateRef = useRef();
   const postTypeRef = useRef();
   const postContentRef = useRef();
   const postLinkRef = useRef();
@@ -64,7 +68,6 @@ const Profile = (props) => {
     if (temp.end_date) {
       expEndDateRef.current.value = temp.end_date.slice(0, 10);
     }
-    window.edit_experience_modal.showModal();
   };
 
   const updateInfo = async () => {
@@ -243,12 +246,12 @@ const Profile = (props) => {
   const addExperience = async () => {
     let addBody = {
       user: userCtx.userUUID,
-      type: expTypeRef.current.value,
-      content: expContentRef.current.value,
-      start_date: expStartDateRef.current.value,
+      type: addExpTypeRef.current.value,
+      content: addExpContentRef.current.value,
+      start_date: addExpStartDateRef.current.value,
     };
-    if (expEndDateRef.current.value !== "") {
-      addBody["end_date"] = expEndDateRef.current.value;
+    if (addExpEndDateRef.current.value !== "") {
+      addBody["end_date"] = addExpEndDateRef.current.value;
     }
     const { ok, data } = await fetchData(
       "/routes/add-experience/",
@@ -259,6 +262,10 @@ const Profile = (props) => {
 
     if (ok) {
       props.getUserExperiences();
+      addExpTypeRef.current.value = "";
+      addExpContentRef.current.value = "";
+      addExpStartDateRef.current.value = "";
+      addExpEndDateRef.current.value = "";
     } else {
       console.log(data);
     }
@@ -327,6 +334,9 @@ const Profile = (props) => {
 
     if (ok) {
       props.getUserPosts();
+      postTypeRef.current.value = "";
+      postContentRef.current.value = "";
+      postLinkRef.current.value = "";
     } else {
       console.log(data);
     }
@@ -555,9 +565,11 @@ const Profile = (props) => {
                               className="btn btn-outline btn-xs btn-accent"
                               onClick={() => {
                                 setExpRefs(item.id);
+                                // window.edit_experience_modal.showModal();
+                                window.choose_edit_delete_experience_modal.showModal();
                               }}
                             >
-                              edit
+                              edit / delete
                             </button>
                           )}
                         </div>
@@ -770,6 +782,34 @@ const Profile = (props) => {
           </div>
         </form>
       </dialog>
+      <dialog id="choose_edit_delete_experience_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <div className="font-bold text-xl">
+            Do you want to edit or delete this experience?
+          </div>
+          <div className="modal-action">
+            <button
+              className="btn"
+              onClick={() => {
+                console.log("opening editing modal");
+                console.log(expContentRef.current.value);
+                window.edit_experience_modal.showModal();
+              }}
+            >
+              EDIT
+            </button>
+            <button
+              className="btn"
+              onClick={() => {
+                window.delete_experience_modal.showModal();
+              }}
+            >
+              DELETE
+            </button>
+            <button className="btn">CANCEL</button>
+          </div>
+        </form>
+      </dialog>
       <dialog id="edit_experience_modal" className="modal">
         <form method="dialog" className="modal-box">
           <h3 className="font-bold text-2xl py-4">Edit My Experience</h3>
@@ -807,6 +847,7 @@ const Profile = (props) => {
             <input
               type="date"
               ref={expStartDateRef}
+              placeholder="date in YYYY-MM-DD format"
               className="input input-bordered"
             />
           </div>
@@ -819,20 +860,13 @@ const Profile = (props) => {
             <input
               type="date"
               ref={expEndDateRef}
+              placeholder="end date in YYYY-MM-DD format, leave blank if none"
               className="input input-bordered"
             />
           </div>
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn">Cancel</button>
-            <button
-              className="btn"
-              onClick={() => {
-                window.delete_experience_modal.showModal();
-              }}
-            >
-              Delete
-            </button>
             <button
               className="btn"
               onClick={() => {
@@ -871,7 +905,7 @@ const Profile = (props) => {
             </label>
             <select
               className="select select-bordered w-full max-w-xs"
-              ref={expTypeRef}
+              ref={addExpTypeRef}
             >
               <option disabled selected>
                 Experience Type
@@ -887,7 +921,7 @@ const Profile = (props) => {
             </label>
             <input
               type="text"
-              ref={expContentRef}
+              ref={addExpContentRef}
               placeholder="what happened?"
               className="input input-bordered"
             />
@@ -898,7 +932,7 @@ const Profile = (props) => {
             </label>
             <input
               type="date"
-              ref={expStartDateRef}
+              ref={addExpStartDateRef}
               className="input input-bordered"
             />
           </div>
@@ -910,12 +944,11 @@ const Profile = (props) => {
             </label>
             <input
               type="date"
-              ref={expEndDateRef}
+              ref={addExpEndDateRef}
               className="input input-bordered"
             />
           </div>
           <div className="modal-action">
-            {/* if there is a button in form, it will close the modal */}
             <button className="btn">Cancel</button>
             <button
               className="btn"
