@@ -5,8 +5,8 @@ import jwt_decode from "jwt-decode";
 
 const Login = (props) => {
   const userCtx = useContext(UserContext);
-  const [email, setEmail] = useState("cindy@gmail.com");
-  const [password, setPassword] = useState("cindypassword");
+  const [email, setEmail] = useState("reuel@gmail.com");
+  const [password, setPassword] = useState("reuelpassword");
   const [errorFlag, setErrorFlag] = useState(false);
 
   const handleLogin = async () => {
