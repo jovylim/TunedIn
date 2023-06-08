@@ -13,8 +13,6 @@ const FeedPost = (props) => {
   const [likeID, setLikeID] = useState();
   const commentRef = useRef();
 
-  //   const [commenterData, setCommenterData] = useState();
-
   const initialiseReactions = () => {
     setLikes(postReactions.filter((e) => e.type === "LIKE"));
     setComments(postReactions.filter((e) => e.type === "COMMENT"));

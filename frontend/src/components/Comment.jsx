@@ -5,7 +5,6 @@ import { fetchData } from "../helpers/common";
 const Comment = (props) => {
   const userCtx = useContext(UserContext);
   const [commenterData, setCommenterData] = useState();
-  console.log(props.comment.user);
 
   const getCommenterData = async () => {
     const { ok, data } = await fetchData(
@@ -16,18 +15,14 @@ const Comment = (props) => {
 
     if (ok) {
       setCommenterData(data);
-      console.log(commenterData);
     } else {
       console.log(data);
     }
   };
 
   useEffect(() => {
-    console.log("hello");
     getCommenterData();
   }, []);
-
-  console.log(commenterData);
 
   return (
     <div className="flex items-center space-x-3 p-2" key={props.idx}>
