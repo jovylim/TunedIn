@@ -23,9 +23,10 @@ const Feed = (props) => {
             <>
               {profiles.find((e) => e.uuid === item.user) && (
                 <FeedPost
-                  key={item.uuid}
+                  key={idx}
                   idx={idx}
                   postID={item.uuid}
+                  profiles={profiles}
                   profile={profiles.find((e) => e.uuid === item.user)}
                   post={item}
                 />

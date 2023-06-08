@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../context/user";
 import { fetchData } from "../helpers/common";
+import Comment from "./Comment";
 
 const FeedPost = (props) => {
   const userCtx = useContext(UserContext);
@@ -10,12 +11,7 @@ const FeedPost = (props) => {
   const [likeCount, setLikeCount] = useState();
   const [commentCount, setCommentCount] = useState([]);
   const [likeID, setLikeID] = useState();
-
-  //   const likes = postReactions.filter((e) => e.type === "LIKE");
-  //   const comments = postReactions.filter((e) => e.type === "COMMENT");
-  //   const likeCount = likes.length;
-  //   const commentCount = comments.length;
-  //   const likeID = likes.find((e) => e.user === userCtx.userUUID).id;
+  //   const [commenterData, setCommenterData] = useState();
 
   const initialiseReactions = () => {
     setLikes(postReactions.filter((e) => e.type === "LIKE"));
@@ -181,8 +177,36 @@ const FeedPost = (props) => {
               </button>
             )}
             <button className="btn btn-outline btn-accent" onClick={() => {}}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="currentColor"
+                stroke="currentColor"
+              >
+                <path d="M17,9H7a1,1,0,0,0,0,2H17a1,1,0,0,0,0-2Zm-4,4H7a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2ZM12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33l-2,2a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,22h9A10,10,0,0,0,12,2Zm0,18H5.41l.93-.93a1,1,0,0,0,0-1.41A8,8,0,1,1,12,20Z" />
+              </svg>
               comments {commentCount}
             </button>
+          </div>
+          <br />
+          <div className="p-2 rounded-lg border-2 border-accent ">
+            <div>Comments:</div>
+            {commentCount > 0 && (
+              <>
+                {comments.map((item, idx) => {
+                  // getCommenterData(item.user);
+                  return (
+                    <Comment
+                      key={idx}
+                      idx={idx}
+                      commentID={item.id}
+                      comment={item}
+                    />
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>
