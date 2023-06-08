@@ -306,19 +306,6 @@ const Profile = (props) => {
     });
   };
 
-  const getPostReactions = async (postID) => {
-    const { ok, data } = await fetchData(
-      "/routes/get-one-post-post-reactions/" + postID,
-      userCtx.accessToken
-    );
-
-    if (ok) {
-      //HERE
-    } else {
-      console.log(data);
-    }
-  };
-
   const addPost = async () => {
     let addBody = {
       user: userCtx.userUUID,

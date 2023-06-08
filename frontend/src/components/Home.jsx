@@ -102,13 +102,10 @@ const Home = () => {
   };
 
   const checkFollowing = () => {
-    // setFollowingTarget(false);
-    // setConnectionID(null);
     const temp = userFollowing.find(
       (e) => e.target_user === userCtx.targetUserUUID
     );
     if (temp) {
-      // setFollowingTarget(true);
       setConnectionID(temp.id);
     }
   };
