@@ -69,7 +69,6 @@ const FeedPost = (props) => {
   };
 
   const unlikePost = async () => {
-    console.log("unlike the post ");
     const { ok, data } = await fetchData(
       "/routes/delete-post-reaction/" + likeID,
       userCtx.accessToken,

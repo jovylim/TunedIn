@@ -722,8 +722,6 @@ const Profile = (props) => {
             <button
               className="btn"
               onClick={() => {
-                console.log("opening editing modal");
-                console.log(expContentRef.current.value);
                 window.edit_experience_modal.showModal();
               }}
             >
