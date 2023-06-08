@@ -125,6 +125,7 @@ class DeletePostReaction(APIView):
 
 
 class OneUserContacts(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, pk):
         contacts = Contacts.objects.filter(user=pk)
         serializer = ContactsSerializer(contacts, many=True)
@@ -158,6 +159,7 @@ class DeleteContact(APIView):
 
 
 class OneUserFollowers(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, pk):
         connections = Connections.objects.filter(target_user=pk)
         serializer = ConnectionsSerializer(connections, many=True)
@@ -165,6 +167,7 @@ class OneUserFollowers(APIView):
 
 
 class OneUserFollowing(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, pk):
         connections = Connections.objects.filter(user=pk)
         serializer = ConnectionsSerializer(connections, many=True)
@@ -172,6 +175,7 @@ class OneUserFollowing(APIView):
 
 
 class AddConnection(APIView):
+    permission_classes = (IsAuthenticated,)
     def put(self, request):
         serializer = ConnectionsSerializer(data=request.data)
         if serializer.is_valid():
@@ -182,6 +186,7 @@ class AddConnection(APIView):
 
 
 class DeleteConnection(APIView):
+    permission_classes = (IsAuthenticated,)
     def delete(self, request, pk):
         connection = Connections.objects.get(id=pk)
         connection.delete()
