@@ -464,7 +464,7 @@ const Profile = (props) => {
             </div>
             <br />
             <div className="grid h-fit card">
-              <div className="stats bg-accent cursor-pointer">
+              <div className="stats bg-neutral cursor-pointer">
                 <div
                   className="stat place-items-center"
                   onClick={() => {

@@ -7,6 +7,7 @@ const Login = (props) => {
   const userCtx = useContext(UserContext);
   const [email, setEmail] = useState("john@gmail.com");
   const [password, setPassword] = useState("johnpassword");
+  const [errorFlag, setErrorFlag] = useState(false);
 
   const handleLogin = async () => {
     const { ok, data } = await fetchData("/routes/token/", undefined, "POST", {
@@ -21,6 +22,7 @@ const Login = (props) => {
       userCtx.setTargetUserUUID(decoded.user_id);
     } else {
       console.log(data);
+      setErrorFlag(true);
     }
   };
 
@@ -64,6 +66,13 @@ const Login = (props) => {
                     No account yet? Click here to register!
                   </a>
                 </label>
+                {errorFlag && (
+                  <label className="label">
+                    <a className="label-text-alt text-red-500">
+                      Error: Incorrect Email or Password.
+                    </a>
+                  </label>
+                )}
               </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary" onClick={handleLogin}>
