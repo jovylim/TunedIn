@@ -30,7 +30,7 @@ const Comment = (props) => {
   console.log(commenterData);
 
   return (
-    <div className="flex items-center space-x-3" key={props.idx}>
+    <div className="flex items-center space-x-3 p-2" key={props.idx}>
       {commenterData && (
         <>
           <div className="avatar">

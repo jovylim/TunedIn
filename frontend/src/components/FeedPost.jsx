@@ -11,6 +11,8 @@ const FeedPost = (props) => {
   const [likeCount, setLikeCount] = useState();
   const [commentCount, setCommentCount] = useState([]);
   const [likeID, setLikeID] = useState();
+  const commentRef = useRef();
+
   //   const [commenterData, setCommenterData] = useState();
 
   const initialiseReactions = () => {
@@ -78,6 +80,27 @@ const FeedPost = (props) => {
 
     if (ok) {
       getPostReactions();
+    } else {
+      console.log(data);
+    }
+  };
+
+  const addComment = async () => {
+    const { ok, data } = await fetchData(
+      "/routes/add-post-reaction/",
+      userCtx.accessToken,
+      "PUT",
+      {
+        user: userCtx.userUUID,
+        post: props.postID,
+        type: "COMMENT",
+        comment: commentRef.current.value,
+      }
+    );
+
+    if (ok) {
+      getPostReactions();
+      commentRef.current.value = "";
     } else {
       console.log(data);
     }
@@ -191,11 +214,10 @@ const FeedPost = (props) => {
           </div>
           <br />
           <div className="p-2 rounded-lg border-2 border-accent ">
-            <div>Comments:</div>
+            <div className="text-accent">COMMENTS:</div>
             {commentCount > 0 && (
               <>
                 {comments.map((item, idx) => {
-                  // getCommenterData(item.user);
                   return (
                     <Comment
                       key={idx}
@@ -207,6 +229,22 @@ const FeedPost = (props) => {
                 })}
               </>
             )}
+            <div className="flex flex-row justify-center space-x-2">
+              <div className="form-control">
+                <input
+                  type="text"
+                  ref={commentRef}
+                  placeholder="NEW COMMENT"
+                  className="input input-xs input-accent bg-base-300 input-bordered"
+                />
+              </div>
+              <button
+                className="btn btn-outline btn-accent mx-4 btn-xs"
+                onClick={() => addComment()}
+              >
+                Comment
+              </button>
+            </div>
           </div>
         </div>
       </div>
