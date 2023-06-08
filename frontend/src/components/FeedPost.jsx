@@ -120,24 +120,26 @@ const FeedPost = (props) => {
     >
       <div className="card w-full bg-base-300">
         <div className="card-body">
-          <div className="flex items-center space-x-3 py-2">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src={props.profile.profile_picture} />
+          {userCtx.currentPage !== "profile" && (
+            <div className="flex items-center space-x-3 py-2">
+              <div className="avatar">
+                <div className="mask mask-squircle w-12 h-12">
+                  <img src={props.profile.profile_picture} />
+                </div>
+              </div>
+              <div>
+                <div
+                  className="font-bold hover:underline hover:cursor-pointer"
+                  onClick={() => {
+                    userCtx.setTargetUserUUID(props.post.user);
+                    userCtx.setCurrentPage("profile");
+                  }}
+                >
+                  {props.profile.name}
+                </div>
               </div>
             </div>
-            <div>
-              <div
-                className="font-bold hover:underline hover:cursor-pointer"
-                onClick={() => {
-                  userCtx.setTargetUserUUID(props.post.user);
-                  userCtx.setCurrentPage("profile");
-                }}
-              >
-                {props.profile.name}
-              </div>
-            </div>
-          </div>
+          )}
           {props.post.type === "PHOTO" && <img src={props.post.link}></img>}
           {props.post.type === "VIDEO" && (
             <a className="link">{props.post.link}</a>
@@ -197,7 +199,7 @@ const FeedPost = (props) => {
                 {likeCount}
               </button>
             )}
-            <button className="btn btn-outline btn-accent" onClick={() => {}}>
+            <button className="btn btn-outline btn-accent">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
