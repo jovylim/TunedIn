@@ -9,6 +9,7 @@ Business accounts have the additional option of post type - jobs.
 
 ## Technologies Used
 
+- React.js
 - PostgreSQL
 - Django
 - React
